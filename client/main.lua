@@ -1,11 +1,6 @@
-local HasAlreadyEnteredMarker = false
-local LastZone
-local CurrentAction
-local CurrentActionMsg        = ''
-local CurrentActionData       = {}
-local IsInMainMenu            = false
-local HasPaid                 = false
-
+local CurrentActionData = {}
+local HasAlreadyEnteredMarker, IsInMainMenu = false, false
+local LastZone, CurrentAction, CurrentActionMsg
 ESX = nil
 
 Citizen.CreateThread(function()
@@ -115,11 +110,11 @@ end
 
 -- Entered Marker
 AddEventHandler('esx_advancedhospital:hasEnteredMarker', function(zone)
-	if zone == '' then
+	if zone == 'HealingLocation' then
 		CurrentAction     = 'healing_menu'
 		CurrentActionMsg  = _U('healing_menu')
 		CurrentActionData = {}
-	elseif zone == '' then
+	elseif zone == 'SurgeryLocation' then
 		CurrentAction     = 'surgery_menu'
 		CurrentActionMsg  = _U('surgery_menu')
 		CurrentActionData = {}
@@ -291,6 +286,7 @@ Citizen.CreateThread(function()
 				elseif CurrentAction == 'surgery_menu' then
 					OpenSurgeryMenu()
 				end
+
 				CurrentAction = nil
 			end
 		else
