@@ -1,16 +1,19 @@
-# esx_advancedhospital
+# esx_advancedhospital:
 Advanced Hospital for ESX
 
 This is a Combination of Both my esx_hospital & esx_plasticsurgery. 
 
-# Helpfull Info
+# Helpfull Info:
 * Players can pay to get Healed or pay to change the looks of their character.
 * THIS IS A NEW SCRIPT THAT I HAVEN'T FULLY TESTED
 
 # Requirements:
 * Required:
+  * [es_extended](https://github.com/ESX-Org/es_extended)
   * [esx_skin](https://github.com/ESX-Org/esx_skin)
   * [skinchanger](https://github.com/ESX-Org/skinchanger)
+* Optional:
+  * NONE
 
 # Download & Installation:
 1) Download the .zip.
@@ -27,6 +30,8 @@ If you like this please check out some of my other stuff like
 * [esx_advancedgarage](https://github.com/HumanTree92/esx_advancedgarage)
 * [esx_advancedvehicleshop](https://github.com/HumanTree92/esx_advancedvehicleshop)
 * [esx_advancedhospital](https://github.com/HumanTree92/esx_advancedhospital)
+* [esx_advancedweaponshop](https://github.com/HumanTree92/esx_advancedweaponshop)
+* [esx_advancedfuel](https://github.com/HumanTree92/esx_advancedfuel)
 * [esx_extraitems](https://github.com/HumanTree92/esx_extraitems)
 * [esx_licenseshop](https://github.com/HumanTree92/esx_licenseshop)
 * [esx_vehiclespawner](https://github.com/HumanTree92/esx_vehiclespawner)
@@ -57,7 +62,7 @@ Scripts that will no longer be Maintained.
 
 # Legal
 ### License
-esx_advancedhospital - Advanced Hospital for ESX Servers.
+esx_advancedhospital - Advanced Hospital for ESX
 
 Copyright (C) 2011-2020 Velociti Entertainment
 
