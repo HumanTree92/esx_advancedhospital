@@ -1,5 +1,5 @@
 local CurrentActionData = {}
-local HasAlreadyEnteredMarker, IsInMainMenu = false, false
+local HasAlreadyEnteredMarker, IsInMainMenu, HasPaid = false, false, false
 local LastZone, CurrentAction, CurrentActionMsg
 ESX = nil
 
@@ -8,17 +8,6 @@ Citizen.CreateThread(function()
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 		Citizen.Wait(0)
 	end
-
-	while ESX.GetPlayerData().job == nil do
-		Citizen.Wait(10)
-	end
-
-	ESX.PlayerData = ESX.GetPlayerData()
-end)
-
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-	ESX.PlayerData = xPlayer
 end)
 
 -- Open Healing Menu
@@ -40,8 +29,8 @@ function OpenHealingMenu()
 					menu.close()
 					SetEntityHealth(GetPlayerPed(-1), 200)
 				else
-					ESX.ShowNotification(_U('not_enough_money'))
 					IsInMainMenu = false
+					ESX.ShowNotification(_U('not_enough_money'))
 					menu.close()
 				end
 			end)
@@ -52,22 +41,27 @@ function OpenHealingMenu()
 	end, function(data, menu)
 		IsInMainMenu = false
 		menu.close()
+
+		CurrentAction	  = 'healing_menu'
+		CurrentActionMsg  = _U('healing_menu')
+		CurrentActionData = {}
 	end)
 end
 
 -- Open Surgery Menu
 function OpenSurgeryMenu()
 	IsInMainMenu = true
+	HasPaid = false
 
-	TriggerEvent('esx_skin:openSaveableMenu', function(data, menu)
+	TriggerEvent('esx_skin:openRestrictedMenu', function(data, menu) -- Not 100% sure what the difference is between openSaveableMenu & openRestrictedMenu
 		menu.close()
 
 		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'surgery_confirm', {
 			title = _U('buy_surgery', ESX.Math.GroupDigits(Config.SurgeryPrice)),
 			align = 'top-left',
 			elements = {
-				{label = _U('no'),  value = 'no'},
-				{label = _U('yes'), value = 'yes'}
+				{label = _U('yes'), value = 'yes'},
+				{label = _U('no'),  value = 'no'}
 		}}, function(data, menu)
 			menu.close()
 
@@ -79,6 +73,7 @@ function OpenSurgeryMenu()
 						end)
 
 						IsInMainMenu = false
+						HasPaid = true
 						menu.close()
 					else
 						ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
@@ -87,6 +82,7 @@ function OpenSurgeryMenu()
 
 						ESX.ShowNotification(_U('not_enough_money'))
 						IsInMainMenu = false
+						HasPaid = false
 						menu.close()
 					end
 				end)
@@ -96,15 +92,24 @@ function OpenSurgeryMenu()
 				end)
 
 				IsInMainMenu = false
+				HasPaid = false
 				menu.close()
 			end
 		end, function(data, menu)
 			IsInMainMenu = false
 			menu.close()
+
+			CurrentAction	  = 'surgery_menu'
+			CurrentActionMsg  = _U('surgery_menu')
+			CurrentActionData = {}
 		end)
 	end, function(data, menu)
 		IsInMainMenu = false
 		menu.close()
+
+		CurrentAction	  = 'surgery_menu'
+		CurrentActionMsg  = _U('surgery_menu')
+		CurrentActionData = {}
 	end)
 end
 
@@ -123,8 +128,14 @@ end)
 
 -- Exited Marker
 AddEventHandler('esx_advancedhospital:hasExitedMarker', function(zone)
-	if not IsInMainMenu then
+	if not IsInMainMenu or IsInMainMenu then
 		ESX.UI.Menu.CloseAll()
+	end
+
+	if not HasPaid then
+		ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+			TriggerEvent('skinchanger:loadSkin', skin) 
+		end)
 	end
 
 	CurrentAction = nil
@@ -144,10 +155,10 @@ Citizen.CreateThread(function()
 		for k,v in pairs(Config.HealingLocations) do
 			local blip = AddBlipForCoord(v.Coords)
 
-			SetBlipSprite (blip, Config.BlipsHospital.Sprite)
-			SetBlipColour (blip, Config.BlipsHospital.Color)
-			SetBlipDisplay(blip, Config.BlipsHospital.Display)
-			SetBlipScale  (blip, Config.BlipsHospital.Scale)
+			SetBlipSprite (blip, Config.BlipHospital.Sprite)
+			SetBlipColour (blip, Config.BlipHospital.Color)
+			SetBlipDisplay(blip, Config.BlipHospital.Display)
+			SetBlipScale  (blip, Config.BlipHospital.Scale)
 			SetBlipAsShortRange(blip, true)
 
 			BeginTextCommandSetBlipName('STRING')
@@ -160,10 +171,10 @@ Citizen.CreateThread(function()
 		for k,v in pairs(Config.SurgeryLocations) do
 			local blip = AddBlipForCoord(v.Coords)
 
-			SetBlipSprite (blip, Config.BlipsSurgery.Sprite)
-			SetBlipColour (blip, Config.BlipsSurgery.Color)
-			SetBlipDisplay(blip, Config.BlipsSurgery.Display)
-			SetBlipScale  (blip, Config.BlipsSurgery.Scale)
+			SetBlipSprite (blip, Config.BlipSurgery.Sprite)
+			SetBlipColour (blip, Config.BlipSurgery.Color)
+			SetBlipDisplay(blip, Config.BlipSurgery.Display)
+			SetBlipScale  (blip, Config.BlipSurgery.Scale)
 			SetBlipAsShortRange(blip, true)
 
 			BeginTextCommandSetBlipName('STRING')
@@ -216,7 +227,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		local coords = GetEntityCoords(PlayerPedId())
+		local playerCoords = GetEntityCoords(PlayerPedId())
 		local isInMarker, letSleep, currentZone = false, true
 
 		if Config.UseHospital then
@@ -226,12 +237,12 @@ Citizen.CreateThread(function()
 				if distance < Config.DrawDistance then
 					letSleep = false
 
-					if Config.MarkerType ~= -1 then
-						DrawMarker(Config.MarkerType, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.MarkerSize.x, Config.MarkerSize.y, Config.MarkerSize.z, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, false, nil, nil, false)
+					if Config.HospMarker.Type ~= -1 then
+						DrawMarker(Config.HospMarker.Type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.HospMarker.x, Config.HospMarker.y, Config.HospMarker.z, Config.HospMarker.r, Config.HospMarker.g, Config.HospMarker.b, 100, false, true, 2, false, nil, nil, false)
 					end
 
-					if distance < Config.MarkerSize.x then
-						isInMarker, currentZone = true, k
+					if distance < Config.HospMarker.x then
+						isInMarker, currentZone = true, 'HealingLocation'
 					end
 				end
 			end
@@ -244,12 +255,12 @@ Citizen.CreateThread(function()
 				if distance < Config.DrawDistance then
 					letSleep = false
 
-					if Config.MarkerType ~= -1 then
-						DrawMarker(Config.MarkerType, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.MarkerSize.x, Config.MarkerSize.y, Config.MarkerSize.z, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, false, nil, nil, false)
+					if Config.SurgMarker.Type ~= -1 then
+						DrawMarker(Config.SurgMarker.Type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.SurgMarker.x, Config.SurgMarker.y, Config.SurgMarker.z, Config.SurgMarker.r, Config.SurgMarker.g, Config.SurgMarker.b, 100, false, true, 2, false, nil, nil, false)
 					end
 
-					if distance < Config.MarkerSize.x then
-						isInMarker, currentZone = true, k
+					if distance < Config.SurgMarker.x then
+						isInMarker, currentZone = true, 'SurgeryLocation'
 					end
 				end
 			end

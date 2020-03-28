@@ -2,30 +2,18 @@ Config = {}
 Config.Locale = 'en'
 
 Config.DrawDistance = 100
-Config.MarkerType   = 1
-Config.MarkerColor  = {r = 102, g = 102, b = 204}
-Config.MarkerSize   = {x = 2.5, y = 2.5, z = 1.0}
-
-Config.HealingPrice = 100
-Config.SurgeryPrice = 3700
+Config.HospMarker = {Type = 1, r = 102, g = 102, b = 204, x = 2.5, y = 2.5, z = 1.0} -- Hospital Marker | Blue w/Medium Size
+Config.BlipHospital = {Sprite = 403, Color = 2, Display = 2, Scale = 1.0}
+Config.SurgMarker = {Type = 1, r = 102, g = 102, b = 204, x = 2.5, y = 2.5, z = 1.0} -- Surgery Marker | Blue w/Medium Size
+Config.BlipSurgery = {Sprite = 403, Color = 0, Display = 2, Scale = 1.0}
 
 Config.UseHospital = true -- Allows players to Heal Themselves
+Config.HealingPrice = 100
+
 Config.UseSurgeon = true -- Allows players to edit their Character
+Config.SurgeryPrice = 3700
+
 Config.EnablePeds = true -- Will show Peds on Markers
-
-Config.BlipsHospital = {
-	Sprite = 403,
-	Color = 2,
-	Display = 2,
-	Scale = 1.0
-}
-
-Config.BlipsSurgery = {
-	Sprite = 403,
-	Color = 0,
-	Display = 2,
-	Scale = 1.0
-}
 
 Config.HealingLocations = {
 	Healing_Location1 = {
