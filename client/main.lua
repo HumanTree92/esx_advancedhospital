@@ -17,7 +17,7 @@ function OpenHealingMenu()
 	ESX.UI.Menu.CloseAll()
 	ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'healing_confirm', {
 		title = _U('buy_health', ESX.Math.GroupDigits(Config.HealingPrice)),
-		align = 'top-left',
+		align = Config.MenuAlign,
 		elements = {
 			{label = _U('no'),  value = 'no'},
 			{label = _U('yes'), value = 'yes'}
@@ -58,7 +58,7 @@ function OpenSurgeryMenu()
 
 		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'surgery_confirm', {
 			title = _U('buy_surgery', ESX.Math.GroupDigits(Config.SurgeryPrice)),
-			align = 'top-left',
+			align = Config.MenuAlign,
 			elements = {
 				{label = _U('yes'), value = 'yes'},
 				{label = _U('no'),  value = 'no'}
