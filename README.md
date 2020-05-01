@@ -1,9 +1,8 @@
 # esx_advancedhospital:
-Advanced Hospital for ESX
-
-This is a Combination of Both my esx_hospital & esx_plasticsurgery. 
+Advanced Hospital for ESX - Edited/Made by Human Tree92 ([Velociti Entertainment Customs & Wiki](http://www.velocitientertainment.com/customs/))
 
 # Helpfull Info:
+* This is a Combination of Both my esx_hospital & esx_plasticsurgery.
 * Players can pay to get Healed or pay to change the looks of their character.
 * THIS IS A NEW SCRIPT THAT I HAVEN'T FULLY TESTED
 
@@ -27,12 +26,16 @@ This is a Combination of Both my esx_hospital & esx_plasticsurgery.
 
 # Other Scripts:
 If you like this please check out some of my other stuff like
-* [esx_advancedgarage](https://github.com/HumanTree92/esx_advancedgarage)
-* [esx_advancedvehicleshop](https://github.com/HumanTree92/esx_advancedvehicleshop)
-* [esx_advancedhospital](https://github.com/HumanTree92/esx_advancedhospital)
-* [esx_advancedweaponshop](https://github.com/HumanTree92/esx_advancedweaponshop)
+* [esx_advancedbanking](https://github.com/HumanTree92/esx_advancedbanking)
 * [esx_advancedfuel](https://github.com/HumanTree92/esx_advancedfuel)
+* [esx_advancedgarage](https://github.com/HumanTree92/esx_advancedgarage)
+* [esx_advancedholdup](https://github.com/HumanTree92/esx_advancedholdup)
+* [esx_advancedhospital](https://github.com/HumanTree92/esx_advancedhospital)
+* [esx_advancedjail](https://github.com/HumanTree92/esx_advancedjail)
+* [esx_advancedvehicleshop](https://github.com/HumanTree92/esx_advancedvehicleshop)
+* [esx_advancedweaponshop](https://github.com/HumanTree92/esx_advancedweaponshop)
 * [esx_extraitems](https://github.com/HumanTree92/esx_extraitems)
+* [esx_joblisting](https://github.com/HumanTree92/esx_joblisting)
 * [esx_licenseshop](https://github.com/HumanTree92/esx_licenseshop)
 * [esx_vehiclespawner](https://github.com/HumanTree92/esx_vehiclespawner)
 * [FiveM_CustomMapAddons](https://github.com/HumanTree92/FiveM_CustomMapAddons)

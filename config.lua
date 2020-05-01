@@ -10,9 +10,11 @@ Config.SurgMarker = {Type = 1, r = 102, g = 102, b = 204, x = 2.5, y = 2.5, z = 
 Config.BlipSurgery = {Sprite = 403, Color = 0, Display = 2, Scale = 1.0}
 
 Config.UseHospital = false -- Allows players to Heal Themselves
+Config.UseHospitalBlips = false -- true = Uses Hospital Blips
 Config.HealingPrice = 100
 
 Config.UseSurgeon = false -- Allows players to edit their Character
+Config.UseSurgeonBlips = false -- true = Uses Surgery Blips
 Config.SurgeryPrice = 3700
 
 Config.EnablePeds = false -- Will show Peds on Markers
@@ -46,7 +48,7 @@ Config.HealingLocations = {
 		Coords  = vector3(-240.3, 6324.1, 31.4),
 		Heading = 221.37
 	},
-	Healing_Location8 = { -- Pillbox Hill | Use if not using Pillbox Hill MLO
+	Healing_Location8 = { -- Pillbox Hill
 		Coords  = vector3(298.7, -584.6, 42.2),
 		Heading = 75.49
 	}

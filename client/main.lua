@@ -19,7 +19,7 @@ function OpenHealingMenu()
 		title = _U('buy_health', ESX.Math.GroupDigits(Config.HealingPrice)),
 		align = Config.MenuAlign,
 		elements = {
-			{label = _U('no'),  value = 'no'},
+			{label = _U('no'), value = 'no'},
 			{label = _U('yes'), value = 'yes'}
 	}}, function(data, menu)
 		if data.current.value == 'yes' then
@@ -42,8 +42,8 @@ function OpenHealingMenu()
 		IsInMainMenu = false
 		menu.close()
 
-		CurrentAction	  = 'healing_menu'
-		CurrentActionMsg  = _U('healing_menu')
+		CurrentAction = 'healing_menu'
+		CurrentActionMsg = _U('healing_menu')
 		CurrentActionData = {}
 	end)
 end
@@ -60,8 +60,8 @@ function OpenSurgeryMenu()
 			title = _U('buy_surgery', ESX.Math.GroupDigits(Config.SurgeryPrice)),
 			align = Config.MenuAlign,
 			elements = {
-				{label = _U('yes'), value = 'yes'},
-				{label = _U('no'),  value = 'no'}
+				{label = _U('no'), value = 'no'},
+				{label = _U('yes'), value = 'yes'}
 		}}, function(data, menu)
 			menu.close()
 
@@ -99,16 +99,16 @@ function OpenSurgeryMenu()
 			IsInMainMenu = false
 			menu.close()
 
-			CurrentAction	  = 'surgery_menu'
-			CurrentActionMsg  = _U('surgery_menu')
+			CurrentAction = 'surgery_menu'
+			CurrentActionMsg = _U('surgery_menu')
 			CurrentActionData = {}
 		end)
 	end, function(data, menu)
 		IsInMainMenu = false
 		menu.close()
 
-		CurrentAction	  = 'surgery_menu'
-		CurrentActionMsg  = _U('surgery_menu')
+		CurrentAction = 'surgery_menu'
+		CurrentActionMsg = _U('surgery_menu')
 		CurrentActionData = {}
 	end)
 end
@@ -116,12 +116,12 @@ end
 -- Entered Marker
 AddEventHandler('esx_advancedhospital:hasEnteredMarker', function(zone)
 	if zone == 'HealingLocation' then
-		CurrentAction     = 'healing_menu'
-		CurrentActionMsg  = _U('healing_menu')
+		CurrentAction = 'healing_menu'
+		CurrentActionMsg = _U('healing_menu')
 		CurrentActionData = {}
 	elseif zone == 'SurgeryLocation' then
-		CurrentAction     = 'surgery_menu'
-		CurrentActionMsg  = _U('surgery_menu')
+		CurrentAction = 'surgery_menu'
+		CurrentActionMsg = _U('surgery_menu')
 		CurrentActionData = {}
 	end
 end)
@@ -151,7 +151,7 @@ end)
 
 -- Create Blips
 Citizen.CreateThread(function()
-	if Config.UseHospital then
+	if Config.UseHospital and Config.UseHospitalBlips then
 		for k,v in pairs(Config.HealingLocations) do
 			local blip = AddBlipForCoord(v.Coords)
 
@@ -167,7 +167,7 @@ Citizen.CreateThread(function()
 		end
 	end
 
-	if Config.UseSurgeon then
+	if Config.UseSurgeon and Config.UseSurgeonBlips then
 		for k,v in pairs(Config.SurgeryLocations) do
 			local blip = AddBlipForCoord(v.Coords)
 
