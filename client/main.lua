@@ -115,11 +115,11 @@ end
 
 -- Entered Marker
 AddEventHandler('esx_advancedhospital:hasEnteredMarker', function(zone)
-	if zone == 'HealingLocation' then
+	if zone == 'HealingLocations' then
 		CurrentAction = 'healing_menu'
 		CurrentActionMsg = _U('healing_menu')
 		CurrentActionData = {}
-	elseif zone == 'SurgeryLocation' then
+	elseif zone == 'SurgeryLocations' then
 		CurrentAction = 'surgery_menu'
 		CurrentActionMsg = _U('surgery_menu')
 		CurrentActionData = {}
@@ -152,72 +152,37 @@ end)
 -- Create Blips
 Citizen.CreateThread(function()
 	if Config.UseHospital and Config.UseHospitalBlips then
-		for k,v in pairs(Config.HealingLocations) do
-			local blip = AddBlipForCoord(v.Coords)
+		for k,v in pairs(Config.Healer) do
+			for i=1, #v.Coords, 1 do
+				local blip = AddBlipForCoord(v.Coords[i])
 
-			SetBlipSprite (blip, Config.BlipHospital.Sprite)
-			SetBlipColour (blip, Config.BlipHospital.Color)
-			SetBlipDisplay(blip, Config.BlipHospital.Display)
-			SetBlipScale  (blip, Config.BlipHospital.Scale)
-			SetBlipAsShortRange(blip, true)
+				SetBlipSprite (blip, Config.BlipHospital.Sprite)
+				SetBlipColour (blip, Config.BlipHospital.Color)
+				SetBlipDisplay(blip, Config.BlipHospital.Display)
+				SetBlipScale  (blip, Config.BlipHospital.Scale)
+				SetBlipAsShortRange(blip, true)
 
-			BeginTextCommandSetBlipName('STRING')
-			AddTextComponentSubstringPlayerName(_U('healing_blip'))
-			EndTextCommandSetBlipName(blip)
+				BeginTextCommandSetBlipName('STRING')
+				AddTextComponentSubstringPlayerName(_U('healing_blip'))
+				EndTextCommandSetBlipName(blip)
+			end
 		end
 	end
 
 	if Config.UseSurgeon and Config.UseSurgeonBlips then
-		for k,v in pairs(Config.SurgeryLocations) do
-			local blip = AddBlipForCoord(v.Coords)
+		for k,v in pairs(Config.Surgery) do
+			for i=1, #v.Coords, 1 do
+				local blip = AddBlipForCoord(v.Coords[i])
 
-			SetBlipSprite (blip, Config.BlipSurgery.Sprite)
-			SetBlipColour (blip, Config.BlipSurgery.Color)
-			SetBlipDisplay(blip, Config.BlipSurgery.Display)
-			SetBlipScale  (blip, Config.BlipSurgery.Scale)
-			SetBlipAsShortRange(blip, true)
+				SetBlipSprite (blip, Config.BlipSurgery.Sprite)
+				SetBlipColour (blip, Config.BlipSurgery.Color)
+				SetBlipDisplay(blip, Config.BlipSurgery.Display)
+				SetBlipScale  (blip, Config.BlipSurgery.Scale)
+				SetBlipAsShortRange(blip, true)
 
-			BeginTextCommandSetBlipName('STRING')
-			AddTextComponentSubstringPlayerName(_U('surgery_blip'))
-			EndTextCommandSetBlipName(blip)
-		end
-	end
-end)
-
--- Create Peds
-Citizen.CreateThread(function()
-	if Config.EnablePeds then
-		if Config.UseHospital then
-			RequestModel(GetHashKey("s_m_m_doctor_01"))
-
-			while not HasModelLoaded(GetHashKey("s_m_m_doctor_01")) do
-				Wait(1)
-			end
-
-			for k,v in pairs(Config.HealingLocations) do
-				local npc = CreatePed(4, 0xd47303ac, v.Coords, v.Heading, false, true)
-
-				SetEntityHeading(npc, v.Heading)
-				FreezeEntityPosition(npc, true)
-				SetEntityInvincible(npc, true)
-				SetBlockingOfNonTemporaryEvents(npc, true)
-			end
-		end
-
-		if Config.UseSurgeon then
-			RequestModel(GetHashKey("s_m_y_autopsy_01"))
-
-			while not HasModelLoaded(GetHashKey("s_m_y_autopsy_01")) do
-				Wait(1)
-			end
-
-			for k,v in pairs(Config.SurgeryLocations) do
-				local npc = CreatePed(4, 0xB2273D4E, v.Coords, v.Heading, false, true)
-
-				SetEntityHeading(npc, v.Heading)
-				FreezeEntityPosition(npc, true)
-				SetEntityInvincible(npc, true)
-				SetBlockingOfNonTemporaryEvents(npc, true)
+				BeginTextCommandSetBlipName('STRING')
+				AddTextComponentSubstringPlayerName(_U('surgery_blip'))
+				EndTextCommandSetBlipName(blip)
 			end
 		end
 	end
@@ -231,36 +196,40 @@ Citizen.CreateThread(function()
 		local isInMarker, letSleep, currentZone = false, true
 
 		if Config.UseHospital then
-			for k,v in pairs(Config.HealingLocations) do
-				local distance = #(playerCoords - v.Coords)
+			for k,v in pairs(Config.Healer) do
+				for i=1, #v.Coords, 1 do
+					local distance = #(playerCoords - v.Coords[i])
 
-				if distance < Config.DrawDistance then
-					letSleep = false
+					if distance < Config.DrawDistance then
+						letSleep = false
 
-					if Config.HospMarker.Type ~= -1 then
-						DrawMarker(Config.HospMarker.Type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.HospMarker.x, Config.HospMarker.y, Config.HospMarker.z, Config.HospMarker.r, Config.HospMarker.g, Config.HospMarker.b, 100, false, true, 2, false, nil, nil, false)
-					end
+						if Config.HospMarker.Type ~= -1 then
+							DrawMarker(Config.HospMarker.Type, v.Coords[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.HospMarker.x, Config.HospMarker.y, Config.HospMarker.z, Config.HospMarker.r, Config.HospMarker.g, Config.HospMarker.b, 100, false, true, 2, false, nil, nil, false)
+						end
 
-					if distance < Config.HospMarker.x then
-						isInMarker, currentZone = true, 'HealingLocation'
+						if distance < Config.HospMarker.x then
+							isInMarker, currentZone = true, 'HealingLocations'
+						end
 					end
 				end
 			end
 		end
 
 		if Config.UseSurgeon then
-			for k,v in pairs(Config.SurgeryLocations) do
-				local distance = #(playerCoords - v.Coords)
+			for k,v in pairs(Config.Surgery) do
+				for i=1, #v.Coords, 1 do
+					local distance = #(playerCoords - v.Coords[i])
 
-				if distance < Config.DrawDistance then
-					letSleep = false
+					if distance < Config.DrawDistance then
+						letSleep = false
 
-					if Config.SurgMarker.Type ~= -1 then
-						DrawMarker(Config.SurgMarker.Type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.SurgMarker.x, Config.SurgMarker.y, Config.SurgMarker.z, Config.SurgMarker.r, Config.SurgMarker.g, Config.SurgMarker.b, 100, false, true, 2, false, nil, nil, false)
-					end
+						if Config.SurgMarker.Type ~= -1 then
+							DrawMarker(Config.SurgMarker.Type, v.Coords[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.SurgMarker.x, Config.SurgMarker.y, Config.SurgMarker.z, Config.SurgMarker.r, Config.SurgMarker.g, Config.SurgMarker.b, 100, false, true, 2, false, nil, nil, false)
+						end
 
-					if distance < Config.SurgMarker.x then
-						isInMarker, currentZone = true, 'SurgeryLocation'
+						if distance < Config.SurgMarker.x then
+							isInMarker, currentZone = true, 'SurgeryLocations'
+						end
 					end
 				end
 			end
