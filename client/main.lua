@@ -141,6 +141,7 @@ AddEventHandler('esx_advancedhospital:hasExitedMarker', function(zone)
 	CurrentAction = nil
 end)
 
+-- Resource Stop
 AddEventHandler('onResourceStop', function(resource)
 	if resource == GetCurrentResourceName() then
 		if IsInMainMenu then
