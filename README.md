@@ -1,6 +1,8 @@
 # esx_advancedhospital:
 Advanced Hospital for ESX - Edited/Made by Human Tree92 ([Velociti Entertainment Customs & Wiki](http://www.velocitientertainment.com/customs/))
 
+I can not Guarantee that this will work with the Latest es_extended V2.
+
 # Helpfull Info:
 * This is a Combination of Both my esx_hospital & esx_plasticsurgery.
 * Players can pay to get Healed or pay to change the looks of their character.
@@ -8,7 +10,7 @@ Advanced Hospital for ESX - Edited/Made by Human Tree92 ([Velociti Entertainment
 
 # Requirements:
 * Required:
-  * [es_extended](https://github.com/ESX-Org/es_extended)
+  * [es_extended V1 Final](https://github.com/ESX-Org/es_extended) or [extendedmode](https://github.com/extendedmode/extendedmode)
   * [esx_skin](https://github.com/ESX-Org/esx_skin)
   * [skinchanger](https://github.com/ESX-Org/skinchanger)
 * Optional:
