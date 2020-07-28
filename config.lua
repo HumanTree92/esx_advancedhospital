@@ -2,7 +2,7 @@ Config = {}
 Config.Locale = 'en'
 
 Config.MenuAlign = 'top-left'
-Config.DrawDistance = 100
+Config.DrawDistance = 10
 
 Config.HospMarker = {Type = 1, r = 102, g = 102, b = 204, x = 1.5, y = 1.5, z = 1.0} -- Hospital Marker | Blue w/Normal Size
 Config.BlipHospital = {Sprite = 403, Color = 2, Display = 2, Scale = 1.0}
