@@ -17,7 +17,7 @@ function OpenHealingMenu()
 	ESX.UI.Menu.CloseAll()
 	ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'healing_confirm', {
 		title = _U('buy_health', ESX.Math.GroupDigits(Config.HealingPrice)),
-		align = Config.MenuAlign,
+		align = GetConvar('esx_MenuAlign', 'top-left'),
 		elements = {
 			{label = _U('no'), value = 'no'},
 			{label = _U('yes'), value = 'yes'}
@@ -58,7 +58,7 @@ function OpenSurgeryMenu()
 
 		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'surgery_confirm', {
 			title = _U('buy_surgery', ESX.Math.GroupDigits(Config.SurgeryPrice)),
-			align = Config.MenuAlign,
+			align = GetConvar('esx_MenuAlign', 'top-left'),
 			elements = {
 				{label = _U('no'), value = 'no'},
 				{label = _U('yes'), value = 'yes'}
@@ -110,7 +110,13 @@ function OpenSurgeryMenu()
 		CurrentAction = 'surgery_menu'
 		CurrentActionMsg = _U('surgery_menu')
 		CurrentActionData = {}
-	end)
+	end, {
+		'sex', 'face', 'skin', 'age_1', 'age_2', 'beard_1', 'beard_2', 'beard_3', 'beard_4', 'hair_1', 'hair_2', 'hair_color_1', 'hair_color_2',
+		'eye_color', 'eyebrows_1', 'eyebrows_2', 'eyebrows_3', 'eyebrows_4', 'makeup_1', 'makeup_2', 'makeup_3', 'makeup_4', 'lipstick_1',
+		'lipstick_2', 'lipstick_3', 'lipstick_4', 'blemishes_1', 'blemishes_2', 'blush_1', 'blush_2', 'blush_3', 'complexion_1', 'complexion_2',
+		'sun_1', 'sun_2', 'moles_1', 'moles_2', 'chest_1', 'chest_2', 'chest_3', 'bodyb_1', 'bodyb_2'
+		--'tshirt_1', 'tshirt_2', 'torso_1', 'torso_2', 'decals_1', 'decals_2', 'arms', 'arms_2', 'pants_1', 'pants_2', 'shoes_1', 'shoes_2'
+	})
 end
 
 -- Entered Marker

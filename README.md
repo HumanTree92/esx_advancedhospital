@@ -9,7 +9,6 @@ Advanced Hospital for ESX V1 Final or EXM - Edited/Made by Human Tree92 ([Veloci
 # Helpfull Info:
 * This is a Combination of Both my esx_hospital & esx_plasticsurgery.
 * Players can pay to get Healed or pay to change the looks of their character.
-* THIS IS A NEW SCRIPT THAT I HAVEN'T FULLY TESTED
 
 # Requirements:
 * Required:
@@ -20,10 +19,11 @@ Advanced Hospital for ESX V1 Final or EXM - Edited/Made by Human Tree92 ([Veloci
   * NONE
 
 # Download & Installation:
-1) Download the .zip.
-2) Extract the .zip or Open the .zip.
+1) Download Master or Release & Extract the .zip or Open the .zip.
+2) Edit the `config.lua` before starting the script. By default everything is turned off.
 3) Place `esx_advancedhospital` in your ESX Directory
 4) Add `start esx_advancedhospital` to your server.cfg
+5) Add `setr esx_MenuAlign "top-right"` to your server.cfg
 
 # Credits/Original Code:
 * [DDH3](https://github.com/ddh3)
