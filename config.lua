@@ -2,6 +2,7 @@ Config = {}
 Config.Locale = 'en'
 
 Config.DrawDistance = 10
+Config.MedicRequired = 2 -- Amount of Medics online to prevent Healers.
 
 Config.HospMarker = {Type = 1, r = 102, g = 102, b = 204, x = 1.5, y = 1.5, z = 1.0} -- Hospital Marker | Blue w/Normal Size
 Config.BlipHospital = {Sprite = 403, Color = 2, Display = 2, Scale = 1.0}
