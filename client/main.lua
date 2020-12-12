@@ -1,5 +1,5 @@
 local CurrentActionData = {}
-local HasAlreadyEnteredMarker, IsInMainMenu, HasPaid = false, false, false
+local HasAlreadyEnteredMarker, IsInMainMenu, HasPaid, WasInSergMenu = false, false, false, false
 local LastZone, CurrentAction, CurrentActionMsg
 local connectedMedic = 0
 ESX = nil
@@ -16,44 +16,6 @@ RegisterNetEvent('esx_advancedhospital:connectedMedic')
 AddEventHandler('esx_advancedhospital:connectedMedic', function(_connectedMedic)
 	connectedMedic = _connectedMedic
 end)
-
--- Open Healing Menu
-function OpenHealingMenu()
-	IsInMainMenu = true
-
-	ESX.UI.Menu.CloseAll()
-	ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'healing_confirm', {
-		title = _U('buy_health', ESX.Math.GroupDigits(Config.HealingPrice)),
-		align = GetConvar('esx_MenuAlign', 'top-left'),
-		elements = {
-			{label = _U('no'), value = 'no'},
-			{label = _U('yes'), value = 'yes'}
-	}}, function(data, menu)
-		if data.current.value == 'yes' then
-			ESX.TriggerServerCallback('esx_advancedhospital:payHealing', function(success)
-				if success then
-					IsInMainMenu = false
-					menu.close()
-					SetEntityHealth(GetPlayerPed(-1), 200)
-				else
-					IsInMainMenu = false
-					ESX.ShowNotification(_U('not_enough_money'))
-					menu.close()
-				end
-			end)
-		else
-			IsInMainMenu = false
-			menu.close()
-		end
-	end, function(data, menu)
-		IsInMainMenu = false
-		menu.close()
-
-		CurrentAction = 'healing_menu'
-		CurrentActionMsg = _U('healing_menu')
-		CurrentActionData = {}
-	end)
-end
 
 -- Open Surgery Menu
 function OpenSurgeryMenu()
@@ -80,6 +42,7 @@ function OpenSurgeryMenu()
 						end)
 
 						IsInMainMenu = false
+						WasInSergMenu = true
 						HasPaid = true
 						menu.close()
 					else
@@ -89,6 +52,7 @@ function OpenSurgeryMenu()
 
 						ESX.ShowNotification(_U('not_enough_money'))
 						IsInMainMenu = false
+						WasInSergMenu = true
 						HasPaid = false
 						menu.close()
 					end
@@ -99,23 +63,22 @@ function OpenSurgeryMenu()
 				end)
 
 				IsInMainMenu = false
+				WasInSergMenu = true
 				HasPaid = false
 				menu.close()
 			end
 		end, function(data, menu)
 			IsInMainMenu = false
+			WasInSergMenu = true
 			menu.close()
-
 			CurrentAction = 'surgery_menu'
-			CurrentActionMsg = _U('surgery_menu')
 			CurrentActionData = {}
 		end)
 	end, function(data, menu)
 		IsInMainMenu = false
+		WasInSergMenu = true
 		menu.close()
-
 		CurrentAction = 'surgery_menu'
-		CurrentActionMsg = _U('surgery_menu')
 		CurrentActionData = {}
 	end, {
 		'sex', 'face', 'skin', 'age_1', 'age_2', 'beard_1', 'beard_2', 'beard_3', 'beard_4', 'hair_1', 'hair_2', 'hair_color_1', 'hair_color_2',
@@ -130,11 +93,11 @@ end
 AddEventHandler('esx_advancedhospital:hasEnteredMarker', function(zone)
 	if zone == 'HealingLocations' then
 		CurrentAction = 'healing_menu'
-		CurrentActionMsg = _U('healing_menu')
+		CurrentActionMsg = _U('healing_menu', ESX.Math.GroupDigits(Config.HealingPrice))
 		CurrentActionData = {}
 	elseif zone == 'SurgeryLocations' then
 		CurrentAction = 'surgery_menu'
-		CurrentActionMsg = _U('surgery_menu')
+		CurrentActionMsg = _U('surgery_menu', ESX.Math.GroupDigits(Config.SurgeryPrice))
 		CurrentActionData = {}
 	end
 end)
@@ -145,9 +108,10 @@ AddEventHandler('esx_advancedhospital:hasExitedMarker', function(zone)
 		ESX.UI.Menu.CloseAll()
 	end
 
-	if not HasPaid then
+	if not HasPaid and WasInSergMenu then
 		ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
 			TriggerEvent('skinchanger:loadSkin', skin) 
+			WasInSergMenu = false
 		end)
 	end
 
@@ -279,7 +243,13 @@ Citizen.CreateThread(function()
 					if Config.MedicRequired <= connectedMedic then
 						ESX.ShowNotification(_U('medic_online'))
 					else
-						OpenHealingMenu()
+						ESX.TriggerServerCallback('esx_advancedhospital:payHealing', function(success)
+							if success then
+								SetEntityHealth(GetPlayerPed(-1), 200)
+							else
+								ESX.ShowNotification(_U('not_enough_money'))
+							end
+						end)
 					end
 				elseif CurrentAction == 'surgery_menu' then
 					OpenSurgeryMenu()
