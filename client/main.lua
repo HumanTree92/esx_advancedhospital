@@ -1,5 +1,5 @@
 local CurrentActionData = {}
-local HasAlreadyEnteredMarker, IsInMainMenu, HasPaid, WasInSergMenu = false, false, false, false
+local HasAlreadyEnteredMarker, IsInMainMenu = false, false
 local LastZone, CurrentAction, CurrentActionMsg
 local connectedMedic = 0
 ESX = nil
@@ -19,11 +19,12 @@ end)
 
 -- Open Surgery Menu
 function OpenSurgeryMenu()
+	local playerPed = PlayerPedId()
 	IsInMainMenu = true
-	HasPaid = false
 
 	TriggerEvent('esx_skin:openRestrictedMenu', function(data, menu) -- Not 100% sure what the difference is between openSaveableMenu & openRestrictedMenu
 		menu.close()
+		FreezeEntityPosition(playerPed, true)
 
 		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'surgery_confirm', {
 			title = _U('buy_surgery', ESX.Math.GroupDigits(Config.SurgeryPrice)),
@@ -42,8 +43,7 @@ function OpenSurgeryMenu()
 						end)
 
 						IsInMainMenu = false
-						WasInSergMenu = true
-						HasPaid = true
+						FreezeEntityPosition(playerPed, false)
 						menu.close()
 					else
 						ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
@@ -52,8 +52,7 @@ function OpenSurgeryMenu()
 
 						ESX.ShowNotification(_U('not_enough_money'))
 						IsInMainMenu = false
-						WasInSergMenu = true
-						HasPaid = false
+						FreezeEntityPosition(playerPed, false)
 						menu.close()
 					end
 				end)
@@ -63,20 +62,19 @@ function OpenSurgeryMenu()
 				end)
 
 				IsInMainMenu = false
-				WasInSergMenu = true
-				HasPaid = false
+				FreezeEntityPosition(playerPed, false)
 				menu.close()
 			end
 		end, function(data, menu)
 			IsInMainMenu = false
-			WasInSergMenu = true
+			FreezeEntityPosition(playerPed, false)
 			menu.close()
 			CurrentAction = 'surgery_menu'
 			CurrentActionData = {}
 		end)
 	end, function(data, menu)
 		IsInMainMenu = false
-		WasInSergMenu = true
+		FreezeEntityPosition(playerPed, false)
 		menu.close()
 		CurrentAction = 'surgery_menu'
 		CurrentActionData = {}
@@ -106,13 +104,6 @@ end)
 AddEventHandler('esx_advancedhospital:hasExitedMarker', function(zone)
 	if not IsInMainMenu or IsInMainMenu then
 		ESX.UI.Menu.CloseAll()
-	end
-
-	if not HasPaid and WasInSergMenu then
-		ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-			TriggerEvent('skinchanger:loadSkin', skin) 
-			WasInSergMenu = false
-		end)
 	end
 
 	CurrentAction = nil
