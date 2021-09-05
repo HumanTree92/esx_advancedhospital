@@ -1,21 +1,6 @@
 local CurrentActionData = {}
 local HasAlreadyEnteredMarker, IsInMainMenu = false, false
 local LastZone, CurrentAction, CurrentActionMsg
-local connectedMedic = 0
-ESX = nil
-
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
-end)
-
--- Medic Connected
-RegisterNetEvent('esx_advancedhospital:connectedMedic')
-AddEventHandler('esx_advancedhospital:connectedMedic', function(_connectedMedic)
-	connectedMedic = _connectedMedic
-end)
 
 -- Open Surgery Menu
 function OpenSurgeryMenu()
@@ -231,17 +216,19 @@ Citizen.CreateThread(function()
 
 			if IsControlJustReleased(0, 38) then
 				if CurrentAction == 'healing_menu' then
-					if Config.MedicRequired <= connectedMedic then
-						ESX.ShowNotification(_U('medic_online'))
-					else
-						ESX.TriggerServerCallback('esx_advancedhospital:payHealing', function(success)
-							if success then
-								SetEntityHealth(GetPlayerPed(-1), 200)
-							else
-								ESX.ShowNotification(_U('not_enough_money'))
-							end
-						end)
-					end
+					ESX.TriggerServerCallback('esx_advancedhospital:checkMedic', function(success)
+						if success then
+							ESX.ShowNotification(_U('medic_online'))
+						else
+							ESX.TriggerServerCallback('esx_advancedhospital:payHealing', function(success)
+								if success then
+									SetEntityHealth(GetPlayerPed(-1), 200)
+								else
+									ESX.ShowNotification(_U('not_enough_money'))
+								end
+							end)
+						end
+					end)
 				elseif CurrentAction == 'surgery_menu' then
 					OpenSurgeryMenu()
 				end
