@@ -36,5 +36,3 @@ ESX.RegisterServerCallback('esx_advancedhospital:paySurgery', function(source, c
 		cb(false)
 	end
 end)
-
-CountMedic()
