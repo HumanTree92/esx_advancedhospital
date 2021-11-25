@@ -106,9 +106,9 @@ end)
 -- Create Blips
 Citizen.CreateThread(function()
 	if Config.UseHospital and Config.UseHospitalBlips then
-		for k,v in pairs(Config.Healer) do
-			for i=1, #v.Coords, 1 do
-				local blip = AddBlipForCoord(v.Coords[i])
+		for k,v in pairs(Config.Locations) do
+			for i=1, #v.Healer, 1 do
+				local blip = AddBlipForCoord(v.Healer[i])
 
 				SetBlipSprite (blip, Config.BlipHospital.Sprite)
 				SetBlipColour (blip, Config.BlipHospital.Color)
@@ -124,9 +124,9 @@ Citizen.CreateThread(function()
 	end
 
 	if Config.UseSurgeon and Config.UseSurgeonBlips then
-		for k,v in pairs(Config.Surgery) do
-			for i=1, #v.Coords, 1 do
-				local blip = AddBlipForCoord(v.Coords[i])
+		for k,v in pairs(Config.Locations) do
+			for i=1, #v.Surgery, 1 do
+				local blip = AddBlipForCoord(v.Surgery[i])
 
 				SetBlipSprite (blip, Config.BlipSurgery.Sprite)
 				SetBlipColour (blip, Config.BlipSurgery.Color)
@@ -150,15 +150,15 @@ Citizen.CreateThread(function()
 		local isInMarker, letSleep, currentZone = false, true
 
 		if Config.UseHospital then
-			for k,v in pairs(Config.Healer) do
-				for i=1, #v.Coords, 1 do
-					local distance = #(playerCoords - v.Coords[i])
+			for k,v in pairs(Config.Locations) do
+				for i=1, #v.Healer, 1 do
+					local distance = #(playerCoords - v.Healer[i])
 
 					if distance < Config.DrawDistance then
 						letSleep = false
 
 						if Config.HospMarker.Type ~= -1 then
-							DrawMarker(Config.HospMarker.Type, v.Coords[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.HospMarker.x, Config.HospMarker.y, Config.HospMarker.z, Config.HospMarker.r, Config.HospMarker.g, Config.HospMarker.b, 100, false, true, 2, false, nil, nil, false)
+							DrawMarker(Config.HospMarker.Type, v.Healer[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.HospMarker.x, Config.HospMarker.y, Config.HospMarker.z, Config.HospMarker.r, Config.HospMarker.g, Config.HospMarker.b, 100, false, true, 2, false, nil, nil, false)
 						end
 
 						if distance < Config.HospMarker.x then
@@ -170,15 +170,15 @@ Citizen.CreateThread(function()
 		end
 
 		if Config.UseSurgeon then
-			for k,v in pairs(Config.Surgery) do
-				for i=1, #v.Coords, 1 do
-					local distance = #(playerCoords - v.Coords[i])
+			for k,v in pairs(Config.Locations) do
+				for i=1, #v.Surgery, 1 do
+					local distance = #(playerCoords - v.Surgery[i])
 
 					if distance < Config.DrawDistance then
 						letSleep = false
 
 						if Config.SurgMarker.Type ~= -1 then
-							DrawMarker(Config.SurgMarker.Type, v.Coords[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.SurgMarker.x, Config.SurgMarker.y, Config.SurgMarker.z, Config.SurgMarker.r, Config.SurgMarker.g, Config.SurgMarker.b, 100, false, true, 2, false, nil, nil, false)
+							DrawMarker(Config.SurgMarker.Type, v.Surgery[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.SurgMarker.x, Config.SurgMarker.y, Config.SurgMarker.z, Config.SurgMarker.r, Config.SurgMarker.g, Config.SurgMarker.b, 100, false, true, 2, false, nil, nil, false)
 						end
 
 						if distance < Config.SurgMarker.x then
